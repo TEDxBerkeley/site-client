@@ -76,6 +76,6 @@ application enough, so that you don't need to know how the rest of it works.
 
 1. Create a view in `view.py` with the right decorator.
 2. Create a new object in `libs/sample.py` that extends `Entity`.
-3. Import, instantiate and save your object.
+3. Import, instantiate and save your object inside your new view in `view.py`.
 4. Return a stringified version of your object.
 5. Finally, access the URL specified for your view.
