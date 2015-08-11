@@ -8,7 +8,10 @@ stated.
 
 Here is how to setup a local instance.
 
-1. Duplicate, not fork, this repository as `[app]-client`, and clone it.
+1. Create a new repository `[app]-client`, and clone it.
+2. Add this repository as a remote named `template` `git remote add template git@github.com:Braiiin/template-client.git`
+3. Fetch `git fetch template`.
+4. Merge `git merge template/master`.
 2. Check that needed commands are accessible `source check.sh`.
 3. Install `source install.sh`.
 4. Run server `source activate.sh`.
