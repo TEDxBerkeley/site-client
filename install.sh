@@ -9,6 +9,7 @@ python3 -m venv env
 mkdir -p env/db
 
 # get all submodules
+git submodule init
 git submodule update
 
 # activate virtualenv
