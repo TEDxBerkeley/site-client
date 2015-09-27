@@ -1,17 +1,11 @@
-#Template Client Tier
+#TEDxBerkeley Client Tier
 
-This is a template client tier for a sample Braiiin application. All application
-client tiers should follow the format specified in this template, unless otherwise
-stated.
+This is the TEDxBerkeley client tier for [tedxberkeley.org](tedxberkeley.org).
 
 ## Getting Started
 
 Here is how to setup a local instance.
 
-1. Create a new repository `[app]-client`, and clone it.
-2. Add this repository as a remote named `template` `git remote add template git@github.com:Braiiin/template-client.git`
-3. Fetch `git fetch template`.
-4. Merge `git merge template/master`.
 2. Check that needed commands are accessible `source check.sh`.
 3. Install `source install.sh`.
 4. Run server `source activate.sh`.
@@ -39,13 +33,6 @@ that it is ready for code review.
 name.
 
 ## How It Works
-
-**High-Level Overview**
-
-The client core is responsible for making API calls and authenticating requests.
-Each Braiiin client tier simply treats the core as a distinct, independent 
-library and (1) handles user flow (redirects, template rendering, error display)
-and (2) renders pages using statics and templates.
 
 **Detailed Explanation**
 
