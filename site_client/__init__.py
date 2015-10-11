@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.getcwd()+"/client"))
 from client import create_app
 
 
-def create_template_app(**kwargs):
+def create_site_app(**kwargs):
     """Create a template Flask app"""
     app = create_app(**kwargs)
 
