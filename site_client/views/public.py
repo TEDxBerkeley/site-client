@@ -30,6 +30,12 @@ def team(year=None):
         return jsonify(dict(results=staff))
     return 'Conference staff announcement coming soon.'
 
+@public.route('/nominate' methods=['GET', 'POST'])
+def nominate(year=None):
+    if request.method == 'GET':
+        return render_template('nomination_form.html')
+    else:
+        return "Thank's for submitting a nomination!"
 
 @public.route('/<int:year>/')
 @public.route('/conference')
