@@ -20,8 +20,8 @@ def create_site_app(**kwargs):
     """Create a template Flask app"""
     app = create_app(**kwargs)
 
-    from .views import public  # this must be placed here, after the app is
-                               # created
+    from .views import public, admin
     app.register_blueprints(public)
+    app.register_blueprints(admin)
 
     return app

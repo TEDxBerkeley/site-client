@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, url_for, render_template
-from .libs.core import Conference, Engagement, Speaker, Nomination
+from site_client.libs.core import Conference, Engagement, Speaker, Nomination
 
 
 public = Blueprint('public', __name__, template_folder='templates/public')
@@ -30,7 +30,7 @@ def team(year=None):
         return jsonify(dict(results=staff))
     return 'Conference staff announcement coming soon.'
 
-@public.route('/nominate' methods=['GET', 'POST'])
+@public.route('/nominate', methods=['GET', 'POST'])
 def nominate(year=None):
     if request.method == 'GET':
         return render_template('nomination_form.html')
