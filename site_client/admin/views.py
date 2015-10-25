@@ -1,7 +1,8 @@
 from flask import jsonify, Blueprint, url_for, render_template, request,\
     redirect
-from site_client.libs.core import Conference, Engagement, Speaker, Nomination
-from .forms import AddSpeakerForm, EditSpeakerForm
+from site_client.libs.core import Conference, Engagement, Speaker, Nomination, \
+    Staff, Membership
+from .forms import AddSpeakerForm, EditSpeakerForm, AddStaffForm, EditStaffForm
 
 admin = Blueprint('admin', __name__,
     template_folder='../templates/admin',
@@ -18,6 +19,9 @@ def home():
     conf = get_conference()
     return render_template('dashboard.html')
 
+############
+# SPEAKERS #
+############
 
 @admin.route('/speakers')
 def speakers():
@@ -62,13 +66,52 @@ def speaker_info(speakerId):
     speaker = Speaker(id=speakerId).get()
     return jsonify(speaker._data)
 
+########
+# TEAM #
+########
 
-@admin.route('/team')
-def team():
+@admin.route('/staff')
+def staff():
     conf = get_conference()
     if conf:
-        speakers = conf.fetch_staff()
-    return render_template('header.html', **locals())
+        staff = conf.fetch_staff()
+    return render_template('staff.html', **locals())
+
+
+@admin.route('/staff/add', methods=['POST', 'GET'])
+def staff_add():
+    conf = get_conference()
+    form = AddStaffForm(request.form)
+    if request.method == 'POST':
+        Staff(conference=conf.id, **request.form).post()
+        return redirect(url_for('admin.staff'))
+    return render_template('form.html', **locals())
+
+
+@admin.route('/staff/<string:staffId>/edit', methods=['POST', 'GET'])
+def staff_edit(staffId):
+    conf = get_conference()
+    staff = Staff(id=staffId).get()
+    form = EditStaffForm(request.form, staff)
+    if request.method == 'POST':
+        staff.load(created_at=None, updated_at=None, **request.form).put()
+        return redirect(url_for('admin.staff_info', staffId=staffId))
+    return render_template('form.html', **locals())
+
+
+@admin.route('/staff/<string:staffId>/delete', methods=['POST', 'GET'])
+def staff_delete(staffId):
+    conf = get_conference()
+    if request.method == 'POST':
+        Staff(id=staffId).delete()
+        return redirect(url_for('admin.staff'))
+    return render_template('delete.html', back=url_for('admin.staff'))
+
+
+@admin.route('/staff/<string:staffId>', methods=['POST', 'GET'])
+def staff_info(staffId):
+    staff = Staff(id=staffId).get()
+    return jsonify(staff._data)
 
 
 @admin.route('/conference')

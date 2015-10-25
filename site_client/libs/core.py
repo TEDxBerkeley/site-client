@@ -23,3 +23,11 @@ class Engagement(Entity):
 
 class Nomination(Entity):
     """Nomination object"""
+
+
+class Staff(Entity):
+    """Staff object"""
+
+
+class Membership(Entity):
+    """Connection between staff and conference objects"""

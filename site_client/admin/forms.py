@@ -10,3 +10,14 @@ class AddSpeakerForm(Form):
 
 class EditSpeakerForm(AddSpeakerForm):
     pass
+
+
+class AddStaffForm(Form):
+    name = wtf.StringField()
+    tagline = wtf.StringField()
+    description = wtf.StringField()
+    avatar = wtf.StringField() # path to image
+
+
+class EditStaffForm(AddStaffForm):
+    pass
