@@ -6,7 +6,7 @@ class Conference(Entity):
 
     def fetch_staff(self):
         """Fetches list of all staff for given conference"""
-        return []
+        return self.call('get', func='fetch_staff')
 
     def fetch_speakers(self):
         """Fetches list of all speakers for given conference"""
