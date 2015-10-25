@@ -1,0 +1,7 @@
+{% extends "main.html" %}
+{% block content %}
+<h2>Nominations</h2>
+{% for nomination in nominations %}
+<p><a href="{{ url_for('admin.nomination_info', nominationId=nomination.id) }}">{{ nomination.speaker.name }}</a> (<a href="{{ url_for('admin.nomination_edit', nominationId=nomination.id) }}">edit</a>) (<a href="{{ url_for('admin.nomination_delete', nominationId=nomination.id) }}">delete</a>)</p>
+{% endfor %}
+{% endblock %}

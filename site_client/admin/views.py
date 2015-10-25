@@ -2,7 +2,8 @@ from flask import jsonify, Blueprint, url_for, render_template, request,\
     redirect
 from site_client.libs.core import Conference, Engagement, Speaker, Nomination, \
     Staff, Membership
-from .forms import AddSpeakerForm, EditSpeakerForm, AddStaffForm, EditStaffForm
+from .forms import AddSpeakerForm, EditSpeakerForm, AddStaffForm, EditStaffForm\
+    , AddConferenceForm, EditConferenceForm
 
 admin = Blueprint('admin', __name__,
     template_folder='../templates/admin',
@@ -113,8 +114,49 @@ def staff_info(staffId):
     staff = Staff(id=staffId).get()
     return jsonify(staff._data)
 
+##############
+# CONFERENCE #
+##############
 
 @admin.route('/conference')
 def conference():
     conf = get_conference()
-    return render_template('header.html', **locals())
+    if conf:
+        conferences = Conference().fetch()
+    return render_template('conference.html', **locals())
+
+
+@admin.route('/conference/add', methods=['POST', 'GET'])
+def conference_add():
+    form = AddConferenceForm(request.form)
+    if request.method == 'POST':
+        Conference(**request.form).post()
+        return redirect(url_for('admin.conference'))
+    return render_template('form.html', **locals())
+
+
+@admin.route('/conference/<string:conferenceId>/edit', methods=['POST', 'GET'])
+def conference_edit(conferenceId):
+    conference = Conference(id=conferenceId).get()
+    form = EditConferenceForm(request.form, conference)
+    if request.method == 'POST':
+        conference.load(created_at=None, updated_at=None, **request.form).put()
+        return redirect(url_for('admin.conference_info', conferenceId=conferenceId))
+    return render_template('form.html', **locals())
+
+
+@admin.route('/conference/<string:conferenceId>', methods=['POST', 'GET'])
+def conference_info(conferenceId):
+    conference = Conference(id=conferenceId).get()
+    return jsonify(conference._data)
+
+###############
+# NOMINATIONS #
+###############
+
+@admin.route('/nominations')
+def nominations():
+    conf = get_conference()
+    if conf:
+        nominations = Nomination(conference=conf.id).fetch()
+    return render_template('nominations.html', **locals())

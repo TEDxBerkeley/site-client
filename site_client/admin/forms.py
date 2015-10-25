@@ -21,3 +21,12 @@ class AddStaffForm(Form):
 
 class EditStaffForm(AddStaffForm):
     pass
+
+
+class AddConferenceForm(Form):
+    year = wtf.IntegerField()
+    theme = wtf.StringField()
+
+
+class EditConferenceForm(AddConferenceForm):
+    pass
