@@ -62,7 +62,7 @@ def logout():
 #########
 
 @public.route('/')
-def index():
+def home():
     conf = Conference(year='2015', theme='Finding X').get_or_create()
     return render_template('index.html')
 
