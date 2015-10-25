@@ -14,14 +14,11 @@ import os
 sys.path.insert(0, os.path.join(os.getcwd()+"/client"))
 
 from client import create_app
-
+from .admin.views import admin
+from .public.views import public
 
 def create_site_app(**kwargs):
     """Create a template Flask app"""
     app = create_app(**kwargs)
-
-    from .views import public, admin
-    app.register_blueprints(public)
-    app.register_blueprints(admin)
-
+    app.register_blueprints(public, admin)
     return app
