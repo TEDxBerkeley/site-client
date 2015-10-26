@@ -10,6 +10,7 @@ from .forms import LoginForm, RegisterForm, NominationForm
 from client import hashing, login_manager
 import functools
 
+DEFAULT_YEAR = 2015
 
 public = Blueprint('public', __name__, template_folder='../templates/public')
 
@@ -63,34 +64,32 @@ def logout():
 
 @public.route('/')
 def home():
-    conf = Conference(year='2015', theme='Finding X').get_or_create()
+    conf = Conference(year=DEFAULT_YEAR).get()
     return render_template('index.html')
 
 @public.route('/speakers')
 @public.route('/<int:year>/speakers')
-def speakers(year=None):
+def speakers(year=DEFAULT_YEAR):
     """List of speakers for a conference"""
     conf = Conference(year=year).get()
     if conf:
         speakers = conf.fetch_speakers()
-        return jsonify(dict(results=speakers))
+        return jsonify(dict(results=list(filter(lambda s: s['status'] == 'accepted', speakers))))
     return 'Conference speaker announcements coming soon.'
 
 
 @public.route('/<int:year>/team')
 @public.route('/team')
-def team(year=None):
+def team(year=DEFAULT_YEAR):
     """List of team members for a conference"""
     conf = Conference(year=year).get()
     if conf:
         staff = conf.fetch_staff()
-        return jsonify({
-            'results': [stf for stf in staff if stf['status'] == 'accepted']
-        })
+        return jsonify(dict(results=staff))
     return 'Conference staff announcement coming soon.'
 
 @public.route('/nominate', methods=['GET', 'POST'])
-def nominate(year=None):
+def nominate(year=DEFAULT_YEAR):
     form = NominationForm(request.form)
     if request.method == 'POST':
         Nomination(**request.form).post()
@@ -99,7 +98,7 @@ def nominate(year=None):
 
 @public.route('/<int:year>/')
 @public.route('/conference')
-def conference(year=None):
+def conference(year=DEFAULT_YEAR):
     """Conference main page"""
     conf = Conference(year=year).get()
     if conf:

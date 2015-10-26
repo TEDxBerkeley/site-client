@@ -12,7 +12,7 @@ admin = Blueprint('admin', __name__,
 
 def get_conference():
     """Retrieves current conference"""
-    return Conference(year='2015', theme='Finding X').get_or_create()
+    return Conference(year=2015, theme='Finding X').get_or_create()
 
 
 @admin.route('/')
