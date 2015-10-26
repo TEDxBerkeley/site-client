@@ -6,7 +6,7 @@ from client.exceptions import LogicException
 from flask_login import login_user, redirect as flask_redirect, current_user, \
     logout_user
 from client.libs.core import User, Session
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, NominationForm
 from client import hashing, login_manager
 import functools
 
@@ -84,15 +84,18 @@ def team(year=None):
     conf = Conference(year=year).get()
     if conf:
         staff = conf.fetch_staff()
-        return jsonify(dict(results=staff))
+        return jsonify({
+            'results': [stf for stf in staff if stf['status'] == 'accepted']
+        })
     return 'Conference staff announcement coming soon.'
 
 @public.route('/nominate', methods=['GET', 'POST'])
 def nominate(year=None):
-    if request.method == 'GET':
-        return render_template('nomination_form.html')
-    else:
-        return "Thanks for submitting a nomination!"
+    form = NominationForm(request.form)
+    if request.method == 'POST':
+        Nomination(**request.form).post()
+        return "Thanks for submitting a nomination! <a href=\"%s\">back to tedxberkeley</a>" % url_for('public.home')
+    return render_template('form.html', **locals())
 
 @public.route('/<int:year>/')
 @public.route('/conference')

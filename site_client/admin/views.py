@@ -48,7 +48,9 @@ def speaker_edit(speakerId):
     speaker = Speaker(id=speakerId).get()
     form = EditSpeakerForm(request.form, speaker)
     if request.method == 'POST':
-        speaker.load(created_at=None, updated_at=None, **request.form).put()
+        del speaker.created_at
+        del speaker.updated_at
+        speaker.load(**request.form).put()
         return redirect(url_for('admin.speaker_info', speakerId=speakerId))
     return render_template('form.html', **locals())
 
@@ -95,7 +97,9 @@ def staff_edit(staffId):
     staff = Staff(id=staffId).get()
     form = EditStaffForm(request.form, staff)
     if request.method == 'POST':
-        staff.load(created_at=None, updated_at=None, **request.form).put()
+        del staff.created_at
+        del staff.updated_at
+        staff.load(**request.form).put()
         return redirect(url_for('admin.staff_info', staffId=staffId))
     return render_template('form.html', **locals())
 
@@ -140,7 +144,9 @@ def conference_edit(conferenceId):
     conference = Conference(id=conferenceId).get()
     form = EditConferenceForm(request.form, conference)
     if request.method == 'POST':
-        conference.load(created_at=None, updated_at=None, **request.form).put()
+        del conference.created_at
+        del conference.updated_at
+        conference.load(**request.form).put()
         return redirect(url_for('admin.conference_info', conferenceId=conferenceId))
     return render_template('form.html', **locals())
 
@@ -160,3 +166,20 @@ def nominations():
     if conf:
         nominations = Nomination(conference=conf.id).fetch()
     return render_template('nominations.html', **locals())
+
+
+@admin.route('/nomination/<string:nominationId>/edit/<string:status>')
+def nomination_edit(nominationId, status):
+    nomination = Nomination(id=nominationId).get()
+    speaker = Speaker(id=nomination.speaker).get()
+    if speaker:
+        del speaker.created_at
+        del speaker.updated_at
+        speaker.load(status=status).put()
+    return redirect(url_for('admin.nominations'))
+
+
+@admin.route('/nomination/<string:nominationId>', methods=['POST', 'GET'])
+def nomination_info(nominationId):
+    nomination = Nomination(id=nominationId).get()
+    return jsonify(nomination._data)
