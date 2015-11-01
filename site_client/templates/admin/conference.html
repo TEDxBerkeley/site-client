@@ -1,0 +1,9 @@
+{% extends "main.html" %}
+{% block content %}
+<h2>Conferences</h2>
+<a href="{{ url_for('admin.conference_add')}}">add conference</a>
+{% for conference in conferences %}
+<p>{% if conference.year == 2015 %}(default){% endif %}<a href="{{ url_for('admin.conference_info', conferenceId=conference.id) }}">
+  {{ conference.theme }}({{ conference.year }})</a> (<a href="{{ url_for('admin.conference_edit', conferenceId=conference.id) }}">edit</a>)</p>
+{% endfor %}
+{% endblock %}

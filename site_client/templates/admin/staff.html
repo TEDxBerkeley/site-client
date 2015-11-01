@@ -1,0 +1,8 @@
+{% extends "main.html" %}
+{% block content %}
+<h2>staff</h2>
+<a href="{{ url_for('admin.staff_add')}}">add staff</a>
+{% for person in staff %}
+<p><a href="{{ url_for('admin.staff_info', staffId=staff.id) }}">{{ person.name }}</a> (<a href="{{ url_for('admin.staff_edit', staffId=person.id) }}">edit</a>) (<a href="{{ url_for('admin.staff_delete', staffId=person.id) }}">delete</a>)</p>
+{% endfor %}
+{% endblock %}
